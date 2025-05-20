@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSVCheck</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="index-container">
+    <div class="container">
+        <h1>Welcome to CSVCheck!</h1>
+        <p>Upload your CSV files for analysis and processing.</p>
+
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+        <!-- File upload form -->
+        <form action="/upload" method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
+            <div class="upload-container">
+                <input type="file" name="file" accept=".csv" class="file-input" required>
+                <button type="submit" class="upload-btn">Upload</button>
+            </div>
+            <div id="loader" class="loader" style="display: none;">
+                <div class="spinner"></div>
+                Processing... this could take a few minutes
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function showLoader() {
+            document.getElementById("loader").style.display = "block";
+        }
+    </script>
+</body>
+</html>

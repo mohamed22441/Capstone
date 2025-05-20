@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Insights</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .ml-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .ml-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .ml-model {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .model-title {
+            color: #800080;
+            border-bottom: 2px solid #800080;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .model-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .model-visualization {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            text-align: center;
+        }
+        .model-visualization img {
+            width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .model-visualization img:hover {
+            transform: scale(1.02);
+        }
+        .model-summary {
+            flex: 1;
+            min-width: 300px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            position: relative;
+        }
+        .download-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #800080;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #6a006a;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #800080;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #6a006a;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="ml-container">
+        <div class="ml-header">
+            <h1>Machine Learning Insights</h1>
+            <p>Advanced predictions for your data</p>
+        </div>
+
+        <!-- Linear Regression Section -->
+        <div class="ml-model" id="linear-regression-section">
+            <h2 class="model-title">Linear Regression Analysis</h2>
+            <div class="model-content">
+                {% if linear_regression_url %}
+                <div class="model-visualization">
+                    <img src="{{ linear_regression_url }}" alt="Linear Regression Visualization" class="popup-img">
+                    <a href="{{ linear_regression_url }}" download="linear_regression.png" class="download-btn">Download</a>
+                </div>
+                {% endif %}
+                <div class="model-summary">
+                    <h3>Summary</h3>
+                    <p id="linear-regression-summary">{{ linear_regression_summary }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decision Tree Section -->
+        <div class="ml-model" id="decision-tree-section">
+            <h2 class="model-title">Decision Tree Analysis</h2>
+            <div class="model-content">
+                {% if decision_tree_url %}
+                <div class="model-visualization">
+                    <img src="{{ decision_tree_url }}" alt="Decision Tree Visualization" class="popup-img">
+                    <a href="{{ decision_tree_url }}" download="decision_tree.png" class="download-btn">Download</a>
+                </div>
+                {% endif %}
+                <div class="model-summary">
+                    <h3>Summary</h3>
+                    <p id="decision-tree-summary">{{ decision_tree_summary }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Importance Section -->
+        <div class="ml-model" id="feature-importance-section">
+            <h2 class="model-title">R.F. Feature Importance Analysis</h2>
+            <div class="model-content">
+                {% if feature_importance_url %}
+                <div class="model-visualization">
+                    <img src="{{ feature_importance_url }}" alt="Feature Importance Visualization" class="popup-img">
+                    <a href="{{ feature_importance_url }}" download="feature_importance.png" class="download-btn">Download</a>
+                </div>
+                {% endif %}
+                <div class="model-summary">
+                    <h3>Summary</h3>
+                    <p id="feature-importance-summary">{{ feature_importance_summary }}</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="{{ url_for('results', filename=filename) }}" class="back-btn">Back to Results</a>
+    </div>
+
+    <!-- Popup Container -->
+    <div id="popup-container">
+        <span id="close-popup">&times;</span>
+        <img id="popup-image" src="" alt="Popup Image">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Machine Learning page loaded");
+
+            // Initialize popup functionality
+            const popupContainer = document.getElementById("popup-container");
+            const popupImage = document.getElementById("popup-image");
+            const closePopup = document.getElementById("close-popup");
+
+            // Click handler for visualization images
+            document.querySelectorAll(".popup-img").forEach(img => {
+                img.addEventListener("click", function () {
+                    popupImage.src = this.src;
+                    popupContainer.style.display = "flex";
+                });
+            });
+
+            // Close popup handlers
+            closePopup.addEventListener("click", function () {
+                popupContainer.style.display = "none";
+            });
+
+            popupContainer.addEventListener("click", function (e) {
+                if (e.target === popupContainer) {
+                    popupContainer.style.display = "none";
+                }
+            });
+
+            // Hide empty sections
+            const sections = {
+                'linear-regression-section': '{{ linear_regression_url }}',
+                'decision-tree-section': '{{ decision_tree_url }}',
+                'feature-importance-section': '{{ feature_importance_url }}'
+            };
+
+            for (const [sectionId, url] of Object.entries(sections)) {
+                const section = document.getElementById(sectionId);
+                if (!url || url === 'None') {
+                    section.classList.add('hidden');
+                }
+            }
+
+            // Fetch and update summaries dynamically
+            function fetchAndUpdateSummary(summaryId, apiUrl) {
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const summaryElement = document.getElementById(summaryId);
+                        if (data.summary) {
+                            summaryElement.textContent = data.summary;
+                        } else {
+                            summaryElement.textContent = "Summary not available.";
+                        }
+                    })
+                    .catch(error => console.error('Error fetching summary:', error));
+            }
+
+            // Example: Fetch summaries for each visualization
+            fetchAndUpdateSummary('linear-regression-summary', '/api/linear-regression-summary');
+            fetchAndUpdateSummary('decision-tree-summary', '/api/decision-tree-summary');
+            fetchAndUpdateSummary('feature-importance-summary', '/api/feature-importance-summary');
+        });
+    </script>
+</body>
+</html>

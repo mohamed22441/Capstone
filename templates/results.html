@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processed Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="results-container">
+    <div class="container">
+        <h1>Processed Results</h1>
+        <a href="/" class="back-btn">Back to Upload</a>
+
+                <!-- Download Links Section -->
+                <div class="section download-links">
+                    <h2>Download Processed Data</h2>
+                    <a href="{{ cleaned_csv_signedURL }}" target="_blank" class="download-btn">⬇ Download Cleaned CSV</a>
+                </div>
+            </div>
+        </body>
+
+<!-- ==================== -->
+<!-- MACHINE LEARNING SECTION -->
+<!-- ==================== -->
+<div id="ml-button-container" class="ml-button-container">
+    <!-- ML Predict Button will appear here when visualizations are ready -->
+</div>
+
+<style>
+    /* ML Button Styles */
+    #predictButton {
+        background-color: #800080; /* Purple */
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 15px 0;
+        font-size: 16px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    #predictButton:hover {
+        background-color: #6a006a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    
+    .ml-button-container {
+        text-align: center;
+        padding: 20px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        margin: 25px 0;
+    }
+</style>
+
+<script>
+// ======================================
+// MACHINE LEARNING VISUALIZATIONS CHECKER
+// ======================================
+document.addEventListener("DOMContentLoaded", function() {
+    // Get filename from cleaned CSV URL
+    const cleanedCsvUrl = "{{ cleaned_csv }}";
+    const filename = cleanedCsvUrl.split('/').pop();
+    
+    if (!filename) {
+        console.error("Could not extract filename");
+        return;
+    }
+
+    // Polling configuration
+    const MAX_ATTEMPTS = 4; // 
+    const POLL_INTERVAL = 5000; // 5 seconds
+    let attempts = 0;
+
+    const checkMLVisualizations = () => {
+        if (attempts >= MAX_ATTEMPTS) {
+            console.log("Stopped ML visualization polling after maximum attempts");
+            return;
+        }
+
+        fetch(`/check-ml-visualizations?filename=${encodeURIComponent(filename)}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(data => {
+                attempts++;
+                
+                if (data.ml_plots_available) {
+                    // Create ML prediction button
+                    const container = document.getElementById("ml-button-container");
+                    container.innerHTML = `
+                        <h2>Machine Learning Predictions</h2>
+                        <button id="predictButton">
+                            🚀 Predict on My Data
+                        </button>
+                        <p class="ml-description">Advanced machine learning insights available</p>
+                    `;
+                    
+                    // Add event listener properly
+                    document.getElementById('predictButton').addEventListener('click', () => {
+                        // Use Flask's url_for equivalent in JavaScript
+                        window.location.href = `/machinelearning-page?filename=${encodeURIComponent(filename)}`;
+                    });
+                } else {
+                    setTimeout(checkMLVisualizations, POLL_INTERVAL);
+                }
+            })
+            .catch(error => {
+                console.error("ML visualization check failed:", error);
+                setTimeout(checkMLVisualizations, POLL_INTERVAL);
+            });
+    };
+
+    // Start polling
+    checkMLVisualizations();
+});
+</script>
+
+        <!-- Summary Section -->
+        <div class="section">
+            <h2>Summary</h2>
+            <div class="summary">{{ summary }}</div>
+        </div>
+
+        <!-- Visualizations Section -->
+    <div class="section">
+        <h2>Visualizations</h2>
+        <div class="grid">
+            <!-- Histograms -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Histogram 1</h3>
+                        <img src="{{ histogram_1 }}" alt="Histogram 1">
+                        <a href="{{ histogram_1 }}" download="histogram_1.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ histogram_1_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Histogram 2</h3>
+                        <img src="{{ histogram_2 }}" alt="Histogram 2">
+                        <a href="{{ histogram_2 }}" download="histogram_2.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ histogram_2_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Histogram 3</h3>
+                        <img src="{{ histogram_3 }}" alt="Histogram 3">
+                        <a href="{{ histogram_3 }}" download="histogram_3.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ histogram_3_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Histogram 4</h3>
+                        <img src="{{ histogram_4 }}" alt="Histogram 4">
+                        <a href="{{ histogram_4 }}" download="histogram_4.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ histogram_4_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Histogram 5</h3>
+                        <img src="{{ histogram_5 }}" alt="Histogram 5">
+                        <a href="{{ histogram_5 }}" download="histogram_5.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ histogram_5_summary }}</p>
+                </div>
+            </div>
+            <!-- Barplots -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Barplot 1</h3>
+                        <img src="{{ barplot_1 }}" alt="Barplot 1">
+                        <a href="{{ barplot_1 }}" download="barplot_1.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ barplot_1_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Barplot 2</h3>
+                        <img src="{{ barplot_2 }}" alt="Barplot 2">
+                        <a href="{{ barplot_2 }}" download="barplot_2.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ barplot_2_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Barplot 3</h3>
+                        <img src="{{ barplot_3 }}" alt="Barplot 3">
+                        <a href="{{ barplot_3 }}" download="barplot_3.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ barplot_3_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Barplot 4</h3>
+                        <img src="{{ barplot_4 }}" alt="Barplot 4">
+                        <a href="{{ barplot_4 }}" download="barplot_4.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ barplot_4_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Barplot 5</h3>
+                        <img src="{{ barplot_5 }}" alt="Barplot 5">
+                        <a href="{{ barplot_5 }}" download="barplot_5.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ barplot_5_summary }}</p>
+                </div>
+            </div>
+
+            <!-- Scatterplots -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Scatterplot 1</h3>
+                        <img src="{{ scatterplot_1 }}" alt="Scatterplot 1">
+                        <a href="{{ scatterplot_1 }}" download="scatterplot_1.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ scatterplot_1_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Scatterplot 2</h3>
+                        <img src="{{ scatterplot_2 }}" alt="Scatterplot 2">
+                        <a href="{{ scatterplot_2 }}" download="scatterplot_2.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ scatterplot_2_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Scatterplot 3</h3>
+                        <img src="{{ scatterplot_3 }}" alt="Scatterplot 3">
+                        <a href="{{ scatterplot_3 }}" download="scatterplot_3.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ scatterplot_3_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Scatterplot 4</h3>
+                        <img src="{{ scatterplot_4 }}" alt="Scatterplot 4">
+                        <a href="{{ scatterplot_4 }}" download="scatterplot_4.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ scatterplot_4_summary }}</p>
+                </div>
+            </div>
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Scatterplot 5</h3>
+                        <img src="{{ scatterplot_5 }}" alt="Scatterplot 5">
+                        <a href="{{ scatterplot_5 }}" download="scatterplot_5.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ scatterplot_5_summary }}</p>
+                </div>
+            </div>
+
+            <!-- Box Plot -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Box Plot</h3>
+                        <img src="{{ boxplot }}" alt="Box Plot">
+                        <a href="{{ boxplot }}" download="boxplot.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ boxplot_summary }}</p>
+                </div>
+            </div>
+
+            <!-- Heatmap -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Heatmap</h3>
+                        <img src="{{ heatmap }}" alt="Heatmap">
+                        <a href="{{ heatmap }}" download="heatmap.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ heatmap_summary }}</p>
+                </div>
+            </div>
+
+            <!-- Pair Plot -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Pair Plot</h3>
+                        <img src="{{ pairplot }}" alt="Pair Plot">
+                        <a href="{{ pairplot }}" download="pairplot.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ pairplot_summary }}</p>
+                </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Pie Chart</h3>
+                        <img src="{{ combined_piechart }}" alt="Pie Chart">
+                        <a href="{{ combined_piechart }}" download="combined_piechart.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ combined_piechart_summary }}</p>
+                </div>
+            </div>
+
+            <!-- Count Plot -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Count Plot</h3>
+                        <img src="{{ grouped_countplot }}" alt="Count Plot">
+                        <a href="{{ grouped_countplot }}" download="grouped_countplot.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ grouped_countplot_summary }}</p>
+                </div>
+            </div>
+
+            <!-- Timeseries Plot -->
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <div class="image-container">
+                        <h3>Timeseries Plot</h3>
+                        <img src="{{ time_series_plot }}" alt="Timeseries Plot">
+                        <a href="{{ time_series_plot }}" download="time_series_plot.png" class="download-btn">⬇ Download</a>
+                    </div>
+                </div>
+                <div class="summary-box">
+                    <p class="summary-text">{{ time_series_plot_summary }}</p>
+                </div>
+            </div>
+        </div>  <!-- Close .grid properly here -->
+    </div>  <!-- Close the visualizations section here -->
+
+<!-- Popup Container -->
+<div id="popup-container">
+    <span id="close-popup">&times;</span>
+    <img id="popup-image" src="" alt="Popup Image">
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("JavaScript is loaded!");  // Debugging
+
+        const popupContainer = document.getElementById("popup-container");
+        const popupImage = document.getElementById("popup-image");
+        const closePopup = document.getElementById("close-popup");
+
+        if (!popupContainer || !popupImage || !closePopup) {
+            console.error("Popup elements not found!");
+            return;
+        }
+
+        // Select all visualization images and add event listeners
+        document.querySelectorAll(".visualization-box img").forEach(img => {
+            img.classList.add("popup-img"); // Ensure images have the correct class
+            img.addEventListener("click", function () {
+                console.log("Image clicked:", this.src);  // Debugging
+                popupImage.src = this.src;
+                popupContainer.style.display = "flex";
+            });
+        });
+
+        // Close popup when clicking the close button
+        closePopup.addEventListener("click", function () {
+            popupContainer.style.display = "none";
+        });
+
+        // Close popup when clicking outside the image
+        popupContainer.addEventListener("click", function (e) {
+            if (e.target === popupContainer) {
+                popupContainer.style.display = "none";
+            }
+        });
+
+        // Hide empty visualizations
+        document.querySelectorAll('.visualization-container').forEach(container => {
+            const img = container.querySelector('img');
+            const summary = container.querySelector('.summary-text');
+            if (!img.src || img.src.includes('undefined') || !summary.textContent.trim()) {
+                container.style.display = 'none';
+            }
+        });
+    });
+</script>
+</html>
