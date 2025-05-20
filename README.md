@@ -36,11 +36,11 @@ Below are some example screenshots of the application in use.
 ### 📊 Upload and Analysis Interface
 ![Upload Screenshot](images/upload_interface.png)
 
-### 📈 Sample Visualization Output
-![Visualization Screenshot](images/visualization_output.png)
+### 📈 Sample Visualization Page Output
+![Visualization Page Screenshot](images/visualization_output.png)
 
-### 🤖 Sample Machine Learning Output
-![Machine Learning Screenshot](images/machine_learning_output.png)
+### 🤖 Sample Machine Learning Page Output
+![Machine Learning Page Screenshot](images/machine_learning_output.png)
 
 ---
 
