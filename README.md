@@ -1,1 +1,2 @@
-# CSVCheck-Beta
+# CSV Check
+Cloud-Based Analytics Application: CSV Check ~ Data Visualization for Inexperienced Users
