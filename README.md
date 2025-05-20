@@ -31,7 +31,7 @@ This means you're seeing the interface and local structure that connects to the 
 
 ## 🖼️ Screenshots & Previews
 
-Below are some example screenshots of the application in use. *(Replace the placeholders with actual image links or file paths once uploaded to the repo.)*
+Below are some example screenshots of the application in use.
 
 ### 📊 Upload and Analysis Interface
 ![Upload Screenshot](images/upload_interface.png)
