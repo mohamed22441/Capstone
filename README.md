@@ -40,7 +40,7 @@ Below are some example screenshots of the application in use. *(Replace the plac
 ![Visualization Screenshot](images/visualization_output.png)
 
 ### 🤖 Sample Machine Learning Output
-![Machine Learning Screenshot](images/machinelearning_output.png)
+![Machine Learning Screenshot](images/machine_learning_output.png)
 
 ---
 
